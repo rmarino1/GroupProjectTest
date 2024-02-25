@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import "./styles.css"; // Import your existing styles.css file
 
 const Quote = () => {
   const [quote, setQuote] = useState({});
@@ -7,6 +8,7 @@ const Quote = () => {
   const [loading, setLoading] = useState(true);
   const [userSelection, setUserSelection] = useState(null);
   const [isCorrect, setIsCorrect] = useState(null);
+  const [hasUserSelected, setHasUserSelected] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -42,6 +44,7 @@ const Quote = () => {
   const handleOptionClick = (authorName) => {
     setUserSelection(authorName);
     setIsCorrect(authorName === quote.author);
+    setHasUserSelected(true);
   };
 
   return (
@@ -52,18 +55,26 @@ const Quote = () => {
       ) : (
         <div>
           <p>{quote.content}</p>
-          <h3>Who said this?</h3>
+          {/* <p>- {quote.author}</p> */}
+          <p>Who said this?</p>
           {authorOptions.map((authorName, index) => (
             <button
               key={index}
               onClick={() => handleOptionClick(authorName)}
+              className={
+                hasUserSelected
+                  ? authorName === quote.author
+                    ? "correct"
+                    : "incorrect"
+                  : ""
+              }
               disabled={userSelection !== null} // Disable buttons after user selects an option
             >
               {authorName}
             </button>
           ))}
-          {userSelection !== null && (
-            <p>
+          {hasUserSelected && (
+            <p className={isCorrect ? "correct" : "incorrect"}>
               {isCorrect
                 ? "Correct!"
                 : `Incorrect. The correct answer was ${quote.author}.`}
