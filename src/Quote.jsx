@@ -47,6 +47,9 @@ const Quote = () => {
     setHasUserSelected(true);
   };
 
+  // Shuffle the authorOptions array
+  const shuffledOptions = [...authorOptions].sort(() => Math.random() - 0.5);
+
   return (
     <div>
       <h2>Quote</h2>
@@ -57,7 +60,7 @@ const Quote = () => {
           <p>{quote.content}</p>
           {/* <p>- {quote.author}</p> */}
           <p>Who said this?</p>
-          {authorOptions.map((authorName, index) => (
+          {shuffledOptions.map((authorName, index) => (
             <button
               key={index}
               onClick={() => handleOptionClick(authorName)}
