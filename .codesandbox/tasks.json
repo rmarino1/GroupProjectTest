@@ -16,6 +16,10 @@
       "preview": {
         "port": 5173
       }
+    },
+    "npm install axios": {
+      "name": "axios",
+      "command": "npm install axios"
     }
   }
 }
