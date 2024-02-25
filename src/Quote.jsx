@@ -30,7 +30,10 @@ const Quote = () => {
         );
 
         // Include the correct author's name and additional authors in the options
-        setAuthorOptions([quoteResponse.data.author, ...additionalAuthors]);
+        const allOptions = [quoteResponse.data.author, ...additionalAuthors];
+
+        // Shuffle the authorOptions array only when the component mounts
+        setAuthorOptions(shuffleArray(allOptions));
       } catch (error) {
         console.error(error);
       } finally {
@@ -41,14 +44,15 @@ const Quote = () => {
     fetchData();
   }, []); // Run the effect only once when the component mounts
 
+  const shuffleArray = (array) => {
+    return [...array].sort(() => Math.random() - 0.5);
+  };
+
   const handleOptionClick = (authorName) => {
     setUserSelection(authorName);
     setIsCorrect(authorName === quote.author);
     setHasUserSelected(true);
   };
-
-  // Shuffle the authorOptions array
-  const shuffledOptions = [...authorOptions].sort(() => Math.random() - 0.5);
 
   return (
     <div>
@@ -60,7 +64,7 @@ const Quote = () => {
           <p>{quote.content}</p>
           {/* <p>- {quote.author}</p> */}
           <p>Who said this?</p>
-          {shuffledOptions.map((authorName, index) => (
+          {authorOptions.map((authorName, index) => (
             <button
               key={index}
               onClick={() => handleOptionClick(authorName)}
