@@ -5,6 +5,8 @@ const Quote = () => {
   const [quote, setQuote] = useState({});
   const [authorOptions, setAuthorOptions] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [userSelection, setUserSelection] = useState(null);
+  const [isCorrect, setIsCorrect] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,6 +39,11 @@ const Quote = () => {
     fetchData();
   }, []); // Run the effect only once when the component mounts
 
+  const handleOptionClick = (authorName) => {
+    setUserSelection(authorName);
+    setIsCorrect(authorName === quote.author);
+  };
+
   return (
     <div>
       <h2>Quote</h2>
@@ -45,13 +52,23 @@ const Quote = () => {
       ) : (
         <div>
           <p>{quote.content}</p>
-          <p>- {quote.author}</p>
-          <p>Who said this?</p>
+          <h3>Who said this?</h3>
           {authorOptions.map((authorName, index) => (
-            <button key={index} onClick={() => handleOptionClick(authorName)}>
+            <button
+              key={index}
+              onClick={() => handleOptionClick(authorName)}
+              disabled={userSelection !== null} // Disable buttons after user selects an option
+            >
               {authorName}
             </button>
           ))}
+          {userSelection !== null && (
+            <p>
+              {isCorrect
+                ? "Correct!"
+                : `Incorrect. The correct answer was ${quote.author}.`}
+            </p>
+          )}
         </div>
       )}
     </div>
