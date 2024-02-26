@@ -9,6 +9,7 @@ const Quote = () => {
   const [userSelection, setUserSelection] = useState(null);
   const [isCorrect, setIsCorrect] = useState(null);
   const [hasUserSelected, setHasUserSelected] = useState(false);
+  const [score, setScore] = useState(0);
 
   useEffect(() => {
     fetchData();
@@ -45,7 +46,10 @@ const Quote = () => {
 
   const handleOptionClick = (authorName) => {
     setUserSelection(authorName);
-    setIsCorrect(authorName === quote.author);
+    if (authorName === quote.author) {
+      setScore(score + 1);
+      setIsCorrect(true);
+    }
     setHasUserSelected(true);
   };
 
@@ -94,6 +98,7 @@ const Quote = () => {
   return (
     <div>
       <h2>Quote</h2>
+      <p class="score">Score: {score}</p>
       {loading ? (
         <p>Loading quote...</p>
       ) : (
