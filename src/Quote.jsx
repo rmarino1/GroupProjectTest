@@ -11,38 +11,33 @@ const Quote = () => {
   const [hasUserSelected, setHasUserSelected] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Fetch the quote
-        const quoteResponse = await axios.get("https://api.quotable.io/random");
-        setQuote(quoteResponse.data);
-
-        // Fetch three more random quotes to get additional authors
-        const additionalQuotesResponse = await axios.all([
-          axios.get("https://api.quotable.io/random"),
-          axios.get("https://api.quotable.io/random"),
-          axios.get("https://api.quotable.io/random"),
-        ]);
-
-        // Extract author names from additional quotes
-        const additionalAuthors = additionalQuotesResponse.map(
-          (response) => response.data.author,
-        );
-
-        // Include the correct author's name and additional authors in the options
-        const allOptions = [quoteResponse.data.author, ...additionalAuthors];
-
-        // Shuffle the authorOptions array only when the component mounts
-        setAuthorOptions(shuffleArray(allOptions));
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchData();
   }, []); // Run the effect only once when the component mounts
+
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const quoteResponse = await axios.get("https://api.quotable.io/random");
+      setQuote(quoteResponse.data);
+
+      const additionalQuotesResponse = await axios.all([
+        axios.get("https://api.quotable.io/random"),
+        axios.get("https://api.quotable.io/random"),
+        axios.get("https://api.quotable.io/random"),
+      ]);
+
+      const additionalAuthors = additionalQuotesResponse.map(
+        (response) => response.data.author,
+      );
+
+      const allOptions = [quoteResponse.data.author, ...additionalAuthors];
+      setAuthorOptions(shuffleArray(allOptions));
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const shuffleArray = (array) => {
     return [...array].sort(() => Math.random() - 0.5);
@@ -54,6 +49,48 @@ const Quote = () => {
     setHasUserSelected(true);
   };
 
+  const handleNextQuestion = () => {
+    // Reset state for the next question
+    setUserSelection(null);
+    setIsCorrect(null);
+    setHasUserSelected(false);
+
+    // Fetch a new quote and update options
+    fetchData();
+  };
+
+  const renderOptions = () => {
+    return authorOptions.map((authorName, index) => (
+      <button
+        key={index}
+        onClick={() => handleOptionClick(authorName)}
+        className={
+          hasUserSelected
+            ? authorName === quote.author
+              ? "correct"
+              : "incorrect"
+            : ""
+        }
+        disabled={userSelection !== null}
+      >
+        {authorName}
+      </button>
+    ));
+  };
+
+  const renderFeedback = () => {
+    return (
+      <div>
+        <p className={isCorrect ? "correct" : "incorrect"}>
+          {isCorrect
+            ? "Correct!"
+            : `Incorrect. The correct answer was ${quote.author}.`}
+        </p>
+        <button onClick={handleNextQuestion}>Next Question</button>
+      </div>
+    );
+  };
+
   return (
     <div>
       <h2>Quote</h2>
@@ -62,31 +99,9 @@ const Quote = () => {
       ) : (
         <div>
           <p>{quote.content}</p>
-          {/* <p>- {quote.author}</p> */}
           <p>Who said this?</p>
-          {authorOptions.map((authorName, index) => (
-            <button
-              key={index}
-              onClick={() => handleOptionClick(authorName)}
-              className={
-                hasUserSelected
-                  ? authorName === quote.author
-                    ? "correct"
-                    : "incorrect"
-                  : ""
-              }
-              disabled={userSelection !== null} // Disable buttons after user selects an option
-            >
-              {authorName}
-            </button>
-          ))}
-          {hasUserSelected && (
-            <p className={isCorrect ? "correct" : "incorrect"}>
-              {isCorrect
-                ? "Correct!"
-                : `Incorrect. The correct answer was ${quote.author}.`}
-            </p>
-          )}
+          {renderOptions()}
+          {hasUserSelected && renderFeedback()}
         </div>
       )}
     </div>
