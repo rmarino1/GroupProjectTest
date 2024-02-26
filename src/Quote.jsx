@@ -9,7 +9,8 @@ const Quote = () => {
   const [userSelection, setUserSelection] = useState(null);
   const [isCorrect, setIsCorrect] = useState(null);
   const [hasUserSelected, setHasUserSelected] = useState(false);
-  const [score, setScore] = useState(0);
+  const [numCorrect, setNumCorrect] = useState(0);
+  const [numAsked, setNumAsked] = useState(0);
 
   useEffect(() => {
     fetchData();
@@ -45,9 +46,10 @@ const Quote = () => {
   };
 
   const handleOptionClick = (authorName) => {
+    setNumAsked(numAsked + 1);
     setUserSelection(authorName);
     if (authorName === quote.author) {
-      setScore(score + 1);
+      setNumCorrect(numCorrect + 1);
       setIsCorrect(true);
     }
     setHasUserSelected(true);
@@ -98,7 +100,9 @@ const Quote = () => {
   return (
     <div>
       <h2>Quote</h2>
-      <p class="score">Score: {score}</p>
+      <h4 class="score">
+        Score: {numCorrect} / {numAsked}
+      </h4>
       {loading ? (
         <p>Loading quote...</p>
       ) : (
