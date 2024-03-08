@@ -2,15 +2,13 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./styles.css"; // Import your existing styles.css file
 
-const Quote = () => {
+const Quote = ({ updateScore }) => {
   const [quote, setQuote] = useState({});
   const [authorOptions, setAuthorOptions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [userSelection, setUserSelection] = useState(null);
   const [isCorrect, setIsCorrect] = useState(null);
   const [hasUserSelected, setHasUserSelected] = useState(false);
-  const [numCorrect, setNumCorrect] = useState(0);
-  const [numAsked, setNumAsked] = useState(0);
 
   useEffect(() => {
     fetchData();
@@ -46,10 +44,9 @@ const Quote = () => {
   };
 
   const handleOptionClick = (authorName) => {
-    setNumAsked(numAsked + 1);
     setUserSelection(authorName);
+    updateScore(authorName === quote.author);
     if (authorName === quote.author) {
-      setNumCorrect(numCorrect + 1);
       setIsCorrect(true);
     }
     setHasUserSelected(true);
@@ -100,9 +97,6 @@ const Quote = () => {
   return (
     <div>
       <h2>Quote</h2>
-      <h4 class="score">
-        Score: {numCorrect} / {numAsked}
-      </h4>
       {loading ? (
         <p>Loading quote...</p>
       ) : (
