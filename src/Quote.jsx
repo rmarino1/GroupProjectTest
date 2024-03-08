@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "./styles.css"; // Import your existing styles.css file
+import "./styles.css";
 import Button from "./Button";
 
 const Quote = ({ updateScore }) => {
