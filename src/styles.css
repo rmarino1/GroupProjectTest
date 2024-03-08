@@ -1,7 +1,12 @@
-.App {
-  font-family: sans-serif;
-  text-align: center;
+body {
+  margin: 0;
+  padding: 0;
   background-color: rgb(120, 200, 240);
+  font-family: sans-serif;
+}
+
+.App {
+  text-align: center;
   padding: 1%;
 }
 
