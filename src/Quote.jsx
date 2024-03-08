@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./styles.css"; // Import your existing styles.css file
+import Button from "./Button";
 
 const Quote = ({ updateScore }) => {
   const [quote, setQuote] = useState({});
@@ -64,9 +65,10 @@ const Quote = ({ updateScore }) => {
 
   const renderOptions = () => {
     return authorOptions.map((authorName, index) => (
-      <button
+      <Button
+        handler={() => handleOptionClick(authorName)}
+        text={authorName}
         key={index}
-        onClick={() => handleOptionClick(authorName)}
         className={
           hasUserSelected
             ? authorName === quote.author
@@ -74,10 +76,8 @@ const Quote = ({ updateScore }) => {
               : "incorrect"
             : ""
         }
-        disabled={userSelection !== null}
-      >
-        {authorName}
-      </button>
+        disabled={hasUserSelected}
+      />
     ));
   };
 
@@ -89,7 +89,7 @@ const Quote = ({ updateScore }) => {
             ? "Correct!"
             : `Incorrect. The correct answer was ${quote.author}.`}
         </p>
-        <button onClick={handleNextQuestion}>Next Question</button>
+        <Button handler={handleNextQuestion} text="Next Question" />
       </div>
     );
   };
