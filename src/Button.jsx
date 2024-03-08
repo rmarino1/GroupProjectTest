@@ -1,8 +1,8 @@
-const Button = ({ handler, text, key, className, disabled }) => {
+const Button = ({ handler, text, keys, className, disabled }) => {
   return (
     <button
       onClick={handler}
-      key={key}
+      key={keys}
       className={className}
       disabled={disabled}
     >

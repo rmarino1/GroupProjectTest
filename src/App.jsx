@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import "./styles.css";
 import Quote from "./Quote";
 import Score from "./Score";
+import EndGame from "./EndGame";
+import Button from "./Button";
 
 export default function App() {
   const [numCorrect, setNumCorrect] = useState(0);
@@ -15,11 +17,24 @@ export default function App() {
     }
   };
 
-  return (
-    <div className="App">
-      <h1>Famous Quotes</h1>
-      <Score numCorrect={numCorrect} numAsked={numAsked} />
-      <Quote updateScore={updateScore} />
-    </div>
-  );
+  if (numAsked < 10) {
+    return (
+      <div className="App">
+        <Quote updateScore={updateScore} />
+        <Score numCorrect={numCorrect} numAsked={numAsked} />
+      </div>
+    );
+  } else {
+    return (
+      <div className="App">
+        <EndGame numCorrect={numCorrect} numAsked={numAsked} />
+        <Button
+          handler={() => {
+            setNumCorrect(0), setNumAsked(0);
+          }}
+          text="Play Again"
+        />
+      </div>
+    );
+  }
 }
