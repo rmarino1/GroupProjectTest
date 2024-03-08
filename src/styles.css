@@ -20,8 +20,3 @@ button.incorrect {
   background-color: rgb(247, 69, 69);
   color: black;
 }
-
-.score {
-  text-align: left;
-  color: rgb(252, 114, 45);
-}
