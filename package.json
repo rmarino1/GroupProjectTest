@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "keywords": [],
-  "main": "src/index.tsx",
+  "main": "src/index.jsx",
   "dependencies": {
     "@typescript-eslint/eslint-plugin": "^4.28.0",
     "@typescript-eslint/experimental-utils": "^4.28.0",
